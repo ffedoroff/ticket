@@ -9,9 +9,9 @@ def test_initial0001(migrator):
     old_state = migrator.before((app_name, None))
     with pytest.raises(LookupError):
         # This model does not exist before this migration:
-        old_state.apps.get_model(app_name, 'BlogPost')
+        old_state.apps.get_model(app_name, 'Event')
 
     new_state = migrator.after((app_name, '0001_initial'))
-    model = new_state.apps.get_model(app_name, 'BlogPost')
+    model = new_state.apps.get_model(app_name, 'Event')
 
-    assert model.objects.create(title='test', body='some body')
+    assert model.objects.create(id='test', data={'foo': 'bar'})

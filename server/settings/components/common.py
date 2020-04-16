@@ -50,11 +50,12 @@ INSTALLED_APPS: Tuple[str, ...] = (
 
     # Third party apps
     'django_http_referrer_policy',
+    'rest_framework',
 )
 
 MIDDLEWARE: Tuple[str, ...] = (
     # Content Security Policy:
-    'csp.middleware.CSPMiddleware',
+    # 'csp.middleware.CSPMiddleware',
 
     # Django:
     'django.middleware.security.SecurityMiddleware',
@@ -183,19 +184,19 @@ PASSWORD_HASHERS = [
 # Security
 # https://docs.djangoproject.com/en/2.2/topics/security/
 
-SESSION_COOKIE_HTTPONLY = True
-CSRF_COOKIE_HTTPONLY = True
-SECURE_CONTENT_TYPE_NOSNIFF = True
-SECURE_BROWSER_XSS_FILTER = True
+# SESSION_COOKIE_HTTPONLY = True
+# CSRF_COOKIE_HTTPONLY = True
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# SECURE_BROWSER_XSS_FILTER = True
 
-X_FRAME_OPTIONS = 'DENY'
+# X_FRAME_OPTIONS = 'DENY'
 
 # https://github.com/DmytroLitvinov/django-http-referrer-policy
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Referrer-Policy#Syntax
 REFERRER_POLICY = 'same-origin'
 
 # https://github.com/adamchainz/django-feature-policy#setting
-FEATURE_POLICY: Dict[str, Union[str, List[str]]] = {}  # noqa: WPS234
+# FEATURE_POLICY: Dict[str, Union[str, List[str]]] = {}  # noqa: WPS234
 
 
 # Timeouts
