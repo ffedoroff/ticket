@@ -185,6 +185,8 @@ npm-debug.log
 # Restrict `.idea/` folder at all:
 .idea/
 
+.hypothesis
+
 # CMake
 cmake-build-debug/
 
