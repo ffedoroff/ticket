@@ -13,3 +13,4 @@ class TestEvent(django.TestCase):
         """Tests that instance can be saved and has correct representation."""
         instance.save()
         assert instance.id
+        assert str(instance)
