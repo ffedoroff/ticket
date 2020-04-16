@@ -33,11 +33,11 @@ run_ci () {
   flake8 .
 
   # Running type checking, see https://github.com/typeddjango/django-stubs
-  mypy server tests/**/*.py
+  mypy server*
 
   # Running tests:
   pytest --dead-fixtures --dup-fixtures
-  pytest
+  pytest --cov=server --cov=server_tests
 
   # Run checks to be sure settings are correct (production flag is required):
   DJANGO_ENV=production python manage.py check --deploy --fail-level WARNING

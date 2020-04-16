@@ -35,6 +35,13 @@ python-decouple = "^3.3"
 bcrypt = "^3.1"
 structlog = "^20.1.0"
 
+# ticket
+djangorestframework = "^3.11.0"
+django-filter = "^2.2.0"
+djangorestframework-filters = "1.0.0.dev0"
+django-crispy-forms = "^1.9.0"
+pytest-vcr = "^1.0.2"
+
 
 [tool.poetry.dev-dependencies]
 django-debug-toolbar = "^2.1"
@@ -52,7 +59,7 @@ nitpick = "^0.22"
 pytest = "^5.4"
 pytest-django = "^3.9"
 pytest-cov = "^2.8"
-pytest-randomly = "^3.1"
+# pytest-randomly = "^3.1"
 pytest-deadfixtures = "^2.1"
 pytest-testmon = "^1.0"
 pytest-timeout = "^1.3"
