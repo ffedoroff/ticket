@@ -1,6 +1,7 @@
 import decimal
 import json
 
+from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
 
@@ -56,6 +57,28 @@ class EventTests(TestCase):
         )
         self.client = APIClient()
 
+    def test_admin(self):
+        """List and Get for django admin."""
+        # login as fake admin
+        user = User.objects.create(
+            username='customer@example.com',
+            email='customer@example.com',
+            is_superuser=True,
+            is_staff=True,
+        )
+        admin_client = APIClient()
+        admin_client.force_login(user=user)
+
+        response = admin_client.get('/admin/main/event/')
+        assert response.status_code == 200
+        assert 'fake_id' in str(response.content)
+
+        response = admin_client.get(
+            '/admin/main/event/{id}/change/'.format(id=self.sample_event.id),
+        )
+        assert response.status_code == 200
+        assert 'fake_id' in str(response.content)
+
     def test_get_list(self):
         """Get list of all Events, should return one sample_event."""
         response = self.client.get('/api/event/')
@@ -64,7 +87,7 @@ class EventTests(TestCase):
         assert '"id":"fake_id"' in str(response.content)
 
     def test_get(self):
-        """Get sample_event."""
+        """Get one sample_event."""
         response = self.client.get(
             '/api/event/{id}/'.format(id=self.sample_event.id),
         )
@@ -88,7 +111,7 @@ class EventTests(TestCase):
         assert '"id":"fake_id"' in str(response.content)
 
     def test_post_delete(self):
-        """Post (insert) new event and delete it."""
+        """Post (insert) new event and Delete it."""
         response = self.client.post(
             path='/api/event/',
             data=json.dumps(
