@@ -15,4 +15,4 @@ flake8
 mypy server*
 
 # run tests with coverage in 4 threads
-pytest -n=4 --cov=server --cov=server_tests
+pytest --cov=server --cov=server_tests

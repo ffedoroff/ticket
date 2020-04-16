@@ -8,20 +8,24 @@ from server.json_tools import DecimalJSONEncoder
 _ID_MAX_LENGTH: Final = 120
 _TEXT_MAX_LENGTH: Final = 240
 
-# 4. Inside your Django app, create a searchable api endpoint (returns json) allow the api request to search for
-# event name, event start date, promoter name, ticket cost (min and max for a standard price).
+# event name, event start date, promoter name,
+# ticket cost (min and max for a standard price).
 
 
 @final
 class Event(models.Model):
-    id = models.CharField(help_text='source: id', primary_key=True, max_length=_ID_MAX_LENGTH)
-    # name = models.CharField(max_length=_TEXT_MAX_LENGTH)
-    # start = models.DateTimeField(help_text='source: dates.start.dateTime')
-    # promoter_name = models.CharField(help_text='source: promoter.name' max_length=_POST_TITLE_MAX_LENGTH)
-    data = JSONField(help_text='raw json data', encoder=DecimalJSONEncoder)
-    # cost_standard_min = models.
+    """Main Event model."""
 
     created = models.DateTimeField(auto_now_add=True)
+    data = JSONField(  # noqa: WPS110
+        help_text='raw json data',
+        encoder=DecimalJSONEncoder,
+    )
+    id = models.CharField(  # noqa: WPS125
+        help_text='source: id',
+        primary_key=True,
+        max_length=_ID_MAX_LENGTH,
+    )
     modified = models.DateTimeField(auto_now=True)
 
     def __str__(self) -> str:

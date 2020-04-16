@@ -42,7 +42,6 @@ urlpatterns = [
         template_name='txt/humans.txt',
         content_type='text/plain',
     )),
-
 ]
 
 if settings.DEBUG:  # pragma: no cover
