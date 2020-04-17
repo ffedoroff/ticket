@@ -201,3 +201,7 @@ FEATURE_POLICY: Dict[str, Union[str, List[str]]] = {}  # noqa: WPS234
 
 # Timeouts
 EMAIL_TIMEOUT = 5
+
+# Ticketmaster
+TICKETMASTER_API_KEY = config('TICKETMASTER_API_KEY')
+TICKETMASTER_API_ENDPOINT = 'https://app.ticketmaster.com'
