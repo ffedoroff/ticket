@@ -63,6 +63,7 @@ test:
     - docker push "${IMAGE_FULL_NAME}:dev"
   only:
     - merge_requests
+  coverage: '/[\d\.]+\%\s*$/'
 
 
 # Release scripts
