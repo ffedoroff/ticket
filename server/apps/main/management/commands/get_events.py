@@ -2,15 +2,12 @@ import json
 import logging
 from urllib import request
 
+from django.conf import settings
 from django.core.management.base import BaseCommand
 from tqdm import tqdm
 
 from server.apps.main.event.models import Event
 from server.apps.main.event.views import EventSerializer
-from server.settings.components.common import (
-    TICKETMASTER_API_ENDPOINT,
-    TICKETMASTER_API_KEY,
-)
 
 logger = logging.getLogger(__name__)
 
@@ -52,8 +49,8 @@ class Command(BaseCommand):
 
         # for the first page, generates full url manually
         url = '{api}/discovery/v2/events.json?apikey={key}'.format(
-            api=TICKETMASTER_API_ENDPOINT,
-            key=TICKETMASTER_API_KEY,
+            api=settings.TICKETMASTER_API_ENDPOINT,
+            key=settings.TICKETMASTER_API_KEY,
         )
         for _ in tqdm(range(max_pages)):  # noqa: WPS122
             response = json.loads(request.urlopen(url).read())  # noqa: S310
@@ -82,8 +79,8 @@ class Command(BaseCommand):
 
             next_page = response['_links']['next']['href']
             url = '{api}{next_page}&apikey={key}'.format(
-                api=TICKETMASTER_API_ENDPOINT,
+                api=settings.TICKETMASTER_API_ENDPOINT,
                 next_page=next_page,
-                key=TICKETMASTER_API_KEY,
+                key=settings.TICKETMASTER_API_KEY,
             )
             logger.info('getting {next_page}'.format(next_page=next_page))
