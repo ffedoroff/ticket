@@ -60,7 +60,7 @@ run_ci () {
   poetry check
 
   # Checking dependencies status:
-  pip check
+  # pip check
 
   # Checking docs:
   doc8 -q docs
