@@ -24,4 +24,4 @@ def test_get_events():
 
     # 3 pages should insert/update 58 Events into db (2 events duplicated)
     call_command('get_events', max_pages=3)
-    assert Event.objects.all().count() == 58
+    assert Event.objects.all().count() == 55

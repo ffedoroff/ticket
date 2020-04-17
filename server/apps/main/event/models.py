@@ -16,17 +16,30 @@ _TEXT_MAX_LENGTH: Final = 240
 class Event(models.Model):
     """Main Event model."""
 
-    created = models.DateTimeField(auto_now_add=True)
-    data = JSONField(  # noqa: WPS110
-        help_text='raw json data',
-        encoder=DecimalJSONEncoder,
-    )
     id = models.CharField(  # noqa: WPS125
         help_text='source: id',
         primary_key=True,
         max_length=_ID_MAX_LENGTH,
     )
+    name = models.CharField(help_text='source: name', max_length=_TEXT_MAX_LENGTH)
+    start_date = models.DateTimeField(help_text='source: dates.start.dateTime')
+    promoter_name = models.CharField(help_text='source: promoter.name', max_length=_TEXT_MAX_LENGTH)
+    cost_min = models.DecimalField(
+        help_text='source: priceRanges.min',
+        max_digits=10,
+        decimal_places=2,
+    )
+    cost_max = models.DecimalField(
+        help_text='source: priceRanges.max',
+        max_digits=10,
+        decimal_places=2,
+    )
     modified = models.DateTimeField(auto_now=True)
+    created = models.DateTimeField(auto_now_add=True)
+    data = JSONField(  # noqa: WPS110
+        help_text='raw json data',
+        encoder=DecimalJSONEncoder,
+    )
 
     def __str__(self) -> str:
         """All django models should have this method."""

@@ -11,7 +11,12 @@ class PlanAdmin(admin.ModelAdmin):
 
     list_display = (
         'id',
+        'name',
+        'start_date',
+        'promoter_name',
+        'cost_min',
+        'cost_max',
         'created',
         'modified',
     )
-    list_filter = ('created', 'modified')
+    list_filter = ('start_date', 'cost_min', 'cost_max', 'created', 'modified')

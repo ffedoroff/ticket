@@ -60,22 +60,7 @@ class Command(BaseCommand):
                 serializer_data = {_ID: event_id, 'data': event_data}
                 logger.info('saving event {id}'.format(id=event_id))
 
-                serializer = EventSerializer(data=serializer_data)
-                if not serializer.is_valid(raise_exception=False):
-                    logger.info('event already exists {id}'.format(id=event_id))
-                    # if Event already exists,
-                    # then confirm it and load from db
-                    assert len(serializer.errors) == 1
-                    assert len(serializer.errors[_ID]) == 1
-                    assert str(serializer.errors[_ID][0]) == (
-                        'event with this id already exists.'
-                    )
-                    serializer = EventSerializer(
-                        Event.objects.get(id=event_id),
-                        data=serializer_data,
-                    )
-                    serializer.is_valid(raise_exception=True)
-                serializer.save()  # save or update Event in db
+                self._save_event(event_id, serializer_data)
 
             next_page = response['_links']['next']['href']
             url = '{api}{next_page}&apikey={key}'.format(
@@ -84,3 +69,26 @@ class Command(BaseCommand):
                 key=settings.TICKETMASTER_API_KEY,
             )
             logger.info('getting {next_page}'.format(next_page=next_page))
+
+    def _save_event(self, event_id, serializer_data):
+        serializer = EventSerializer(data=serializer_data)
+        if serializer.is_valid(raise_exception=False):
+            serializer.save()  # insert Event in db
+            return
+        if _ID in serializer.errors and len(serializer.errors) == 1:
+            # if Event already exists, then update it in db
+            assert len(serializer.errors[_ID]) == 1
+            assert str(serializer.errors[_ID][0]) == (
+                'event with this id already exists.'
+            )
+            logger.info('event already exists {id}'.format(id=event_id))
+            serializer = EventSerializer(
+                Event.objects.get(id=event_id),
+                data=serializer_data,
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer.save()  # update Event in db
+        else:
+            logger.warning(
+                'cannot save event {errors}'.format(errors=serializer.errors),
+            )
