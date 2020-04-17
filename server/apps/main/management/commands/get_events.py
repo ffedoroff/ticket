@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand
 from tqdm import tqdm
 
 from server.apps.main.event.models import Event
-from server.apps.main.event.views import EventSerializer
+from server.apps.main.event.views import EventSerializerCreate
 
 logger = logging.getLogger(__name__)
 
@@ -70,8 +70,8 @@ class Command(BaseCommand):
             )
             logger.info('getting {next_page}'.format(next_page=next_page))
 
-    def _save_event(self, event_id, serializer_data):
-        serializer = EventSerializer(data=serializer_data)
+    def _save_event(self, event_id: str, serializer_data):
+        serializer = EventSerializerCreate(data=serializer_data)
         if serializer.is_valid(raise_exception=False):
             serializer.save()  # insert Event in db
             return
@@ -82,7 +82,7 @@ class Command(BaseCommand):
                 'event with this id already exists.'
             )
             logger.info('event already exists {id}'.format(id=event_id))
-            serializer = EventSerializer(
+            serializer = EventSerializerCreate(
                 Event.objects.get(id=event_id),
                 data=serializer_data,
             )

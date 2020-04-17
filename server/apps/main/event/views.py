@@ -1,57 +1,53 @@
 import logging
 
+import jsonschema
 from rest_framework import serializers
 from rest_framework.viewsets import ModelViewSet
 
+from server.apps.main.event.event_schema import EVENT_SCHEMA
 from server.apps.main.event.models import Event
 
 logger = logging.getLogger(__name__)
 
 
-class EventSerializer(serializers.ModelSerializer):
+class EventSerializerCreate(serializers.ModelSerializer):
     """Simple Event serializer."""
 
     class Meta(object):
         model = Event
-        fields = (
+        fields = [
+            'id',
+            'cost_max',
+            'cost_min',
             'created',
             'data',
-            'id',
             'modified',
-        )
-        read_only_fields = (
+            'name',
+            'promoter_name',
+            'start_date',
+        ]
+        read_only_fields = [
+            'cost_max',
+            'cost_min',
             'created',
             'modified',
-        )
+            'name',
+            'promoter_name',
+            'start_date',
+        ]
+        extra_kwargs = {
+            'data': {'write_only': True, 'required': True},
+        }
 
-    def validate_data(self, value):
+    def validate_data(self, value):  # noqa: WPS110
         """Check proper "data" field structure."""
-        errors = []
-
-        # make sure "start date" structure correct
-        if not value.get('dates', {}).get('start', {}).get('dateTime', None):
-            errors.append('start_date incorrect')
-
-        # make sure "cost_min" and "cost_max" structure correct
-        price_ranges = value.get('priceRanges', [])
-        if not isinstance(price_ranges, list) or len(price_ranges) != 1:
-            errors.append('price_ranges incorrect')
-        else:
-            price_ranges = price_ranges[0]
-            if (
-                not isinstance(price_ranges, dict) or
-                price_ranges.get('type', '') != 'standard' or
-                price_ranges.get('currency', '') != 'USD' or
-                not price_ranges.get('min', '') or
-                not price_ranges.get('max', '')
-            ):
-                errors.append('price_ranges incorrect')
-
-        if errors:
-            raise serializers.ValidationError(detail=errors)
+        try:
+            jsonschema.validate(instance=value, schema=EVENT_SCHEMA)
+        except jsonschema.exceptions.ValidationError as error:
+            raise serializers.ValidationError(detail=error.args[0])
         return value
 
-    def validate(self, data):
+    def validate(self, data):  # noqa: WPS110
         """Validates data, update other fields based on data."""
         super().validate(data)
         if 'data' not in data:
@@ -65,6 +61,24 @@ class EventSerializer(serializers.ModelSerializer):
         return data
 
 
+class EventSerializer(EventSerializerCreate):
+    """EventSerializer for REST API (without data)."""
+
+    class Meta(EventSerializerCreate.Meta):
+        fields = [
+            'id',
+            'cost_max',
+            'cost_min',
+            'created',
+            'modified',
+            'name',
+            'promoter_name',
+            'start_date',
+        ]
+        read_only_fields = ['created', 'modified']
+        extra_kwargs = {}  # type: ignore
+
+
 class EventViewSet(ModelViewSet):
     """Simple Event ViewSet CRUD."""
 
@@ -74,5 +88,10 @@ class EventViewSet(ModelViewSet):
         'status_code',
         'user_id',
     )
-    # event name, event start date, promoter name, ticket cost (min and max for a standard price).
     ordering = ('created',)
+
+    def get_serializer(self, *args, **kwargs):
+        """Change serializer when CREATE calls."""
+        if self.action == 'create':
+            return EventSerializerCreate(*args, **kwargs)
+        return self.serializer_class(*args, **kwargs)

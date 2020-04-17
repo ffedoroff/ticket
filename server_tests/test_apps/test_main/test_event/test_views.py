@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
 
-from server.apps.main.event.models import Event
+from server.apps.main.event.views import EventSerializerCreate
 from server.json_tools import DecimalJSONEncoder
 
 
@@ -23,9 +23,9 @@ class EventTests(TestCase):
     def setUp(self):
         """Set up test case."""
         super().setUp()
-        self.sample_event = Event.objects.create(
-            id='fake_id',
-            data={
+        serializer = EventSerializerCreate(data={
+            'id': 'fake_id',
+            'data': {
                 'id': 'fake_id',
                 'name': 'bar',
                 'priceRanges': [{
@@ -35,26 +35,17 @@ class EventTests(TestCase):
                     'max': decimal.Decimal('394.0'),
                 }],
                 'promoter': {
-                    'id': '819',
                     'name': 'DO NOT USE',
-                    'description': 'DO NOT USE / NTL / USA',
                 },
                 'dates': {
                     'start': {
-                        'localDate': '2020-08-08',
-                        'localTime': '14:00:00',
                         'dateTime': '2020-08-08T19:00:00Z',
-                        'dateTBD': False,
-                        'dateTBA': False,
-                        'timeTBA': False,
-                        'noSpecificTime': False,
                     },
-                    'timezone': 'America/Chicago',
-                    'status': {'code': 'onsale'},
-                    'spanMultipleDays': False,
                 },
             },
-        )
+        })
+        serializer.is_valid(raise_exception=True)
+        self.sample_event = serializer.save()
         self.client = APIClient()
 
     def test_admin(self):
@@ -101,13 +92,17 @@ class EventTests(TestCase):
             data=json.dumps(
                 {
                     'id': self.sample_event.id,
-                    'data': self.sample_event.data,
+                    'cost_max': self.sample_event.cost_max,
+                    'name': self.sample_event.name,
+                    'cost_min': self.sample_event.cost_min,
+                    'promoter_name': self.sample_event.promoter_name,
+                    'start_date': self.sample_event.start_date,
                 },
                 cls=DecimalJSONEncoder,
             ),
             content_type='application/json',
         )
-        assert response.status_code == 200
+        assert response.status_code == 200, str(response.content)
         assert '"id":"fake_id"' in str(response.content)
 
     def test_post_delete(self):
@@ -117,14 +112,14 @@ class EventTests(TestCase):
             data=json.dumps(
                 {
                     'id': 'sample2',
-                    'data': {**self.sample_event.data, 'extra_attr': 'works'},
+                    'data': {**self.sample_event.data, 'name': 'new_name'},
                 },
                 cls=DecimalJSONEncoder,
             ),
             content_type='application/json',
         )
         assert response.status_code == 201
-        assert '"extra_attr":"works"' in str(response.content)
+        assert '"name":"new_name"' in str(response.content)
 
         response = self.client.delete('/api/event/sample2/')
         assert response.status_code == 204

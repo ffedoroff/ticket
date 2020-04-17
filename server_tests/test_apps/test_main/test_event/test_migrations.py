@@ -12,6 +12,4 @@ def test_initial0001(migrator):
         old_state.apps.get_model(app_name, 'Event')
 
     new_state = migrator.after((app_name, '0001_initial'))
-    model = new_state.apps.get_model(app_name, 'Event')
-
-    assert model.objects.create(id='test', data={'foo': 'bar'})
+    new_state.apps.get_model(app_name, 'Event')

@@ -21,9 +21,17 @@ class Event(models.Model):
         primary_key=True,
         max_length=_ID_MAX_LENGTH,
     )
-    name = models.CharField(help_text='source: name', max_length=_TEXT_MAX_LENGTH)
-    start_date = models.DateTimeField(help_text='source: dates.start.dateTime')
-    promoter_name = models.CharField(help_text='source: promoter.name', max_length=_TEXT_MAX_LENGTH)
+    name = models.CharField(
+        help_text='source: name',
+        max_length=_TEXT_MAX_LENGTH,
+    )
+    start_date = models.DateTimeField(
+        help_text='source: dates.start.dateTime',
+    )
+    promoter_name = models.CharField(
+        help_text='source: promoter.name',
+        max_length=_TEXT_MAX_LENGTH,
+    )
     cost_min = models.DecimalField(
         help_text='source: priceRanges.min',
         max_digits=10,
