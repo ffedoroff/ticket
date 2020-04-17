@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.test import TestCase
 from rest_framework.test import APIClient
 
-from server.apps.main.event.views import EventSerializerCreate
+from server.apps.main.event.serializers import EventSerializerCreate
 from server.json_tools import DecimalJSONEncoder
 
 

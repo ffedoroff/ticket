@@ -51,6 +51,8 @@ INSTALLED_APPS: Tuple[str, ...] = (
     # Third party apps
     'django_http_referrer_policy',
     'rest_framework',
+    'django_filters',
+    'rest_framework_filters',
 )
 
 MIDDLEWARE: Tuple[str, ...] = (

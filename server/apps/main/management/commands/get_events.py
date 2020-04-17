@@ -7,7 +7,7 @@ from django.core.management.base import BaseCommand
 from tqdm import tqdm
 
 from server.apps.main.event.models import Event
-from server.apps.main.event.views import EventSerializerCreate
+from server.apps.main.event.serializers import EventSerializerCreate
 
 logger = logging.getLogger(__name__)
 
