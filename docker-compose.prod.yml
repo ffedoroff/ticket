@@ -7,7 +7,7 @@ services:
     user: "${UID}:${GID}"
     restart: unless-stopped
     volumes:
-      - .pgdata22:/var/lib/postgresql/data
+      - ./pgdata:/var/lib/postgresql/data
       - /etc/passwd:/etc/passwd:ro
     networks:
       - webnet
@@ -19,13 +19,18 @@ services:
       user: "${UID}:${GID}"
       restart: unless-stopped
       ports:
-        - "5004:5004"
+        - "25004:5004"
       networks:
         - webnet
+      depends_on:
+        - db
+      environment:
+        DJANGO_DATABASE_HOST: db
     command: sh ./docker/django/uwsgi.sh
-    expose:
-      - 5004
 
 networks:
   # Network for your internals, use it by default:
   webnet:
+
+# docker-compose -f docker-compose.prod.yml up -d
+# docker-compose -f docker-compose.prod.yml run --rm web python manage.py migrate
