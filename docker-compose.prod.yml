@@ -1,0 +1,31 @@
+---
+
+version: "3.6"
+services:
+  db:
+    image: "postgres:9.6.9-alpine"
+    user: "${UID}:${GID}"
+    restart: unless-stopped
+    volumes:
+      - .pgdata22:/var/lib/postgresql/data
+      - /etc/passwd:/etc/passwd:ro
+    networks:
+      - webnet
+
+  web:
+    <<: &web
+      # Image for production:
+      image: "registry.gitlab.com/ffedoroff/ticket:latest"
+      user: "${UID}:${GID}"
+      restart: unless-stopped
+      ports:
+        - "5004:5004"
+      networks:
+        - webnet
+    command: sh ./docker/django/uwsgi.sh
+    expose:
+      - 5004
+
+networks:
+  # Network for your internals, use it by default:
+  webnet:
