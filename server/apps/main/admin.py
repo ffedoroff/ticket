@@ -1,4 +1,4 @@
 
 from django.contrib import admin  # noqa: F401
 
-# Register your models here.
+from server.apps.main.event.admin import PlanAdmin  # noqa: F401

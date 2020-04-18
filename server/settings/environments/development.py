@@ -83,3 +83,6 @@ NPLUSONE_LOG_LEVEL = logging.WARN
 NPLUSONE_WHITELIST = [
     {'model': 'admin.*'},
 ]
+
+# in dev and in tests, hide real API key
+TICKETMASTER_API_KEY = '__CHANGEME__'

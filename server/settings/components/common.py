@@ -50,11 +50,14 @@ INSTALLED_APPS: Tuple[str, ...] = (
 
     # Third party apps
     'django_http_referrer_policy',
+    'rest_framework',
+    'django_filters',
+    'rest_framework_filters',
 )
 
 MIDDLEWARE: Tuple[str, ...] = (
     # Content Security Policy:
-    'csp.middleware.CSPMiddleware',
+    # 'csp.middleware.CSPMiddleware',
 
     # Django:
     'django.middleware.security.SecurityMiddleware',
@@ -200,3 +203,7 @@ FEATURE_POLICY: Dict[str, Union[str, List[str]]] = {}  # noqa: WPS234
 
 # Timeouts
 EMAIL_TIMEOUT = 5
+
+# Ticketmaster
+TICKETMASTER_API_KEY = config('TICKETMASTER_API_KEY')
+TICKETMASTER_API_ENDPOINT = 'https://app.ticketmaster.com'

@@ -26,6 +26,10 @@ LOGGING = {
                 key_order=['timestamp', 'level', 'event', 'logger'],
             ),
         },
+        'simple': {
+            'format': '%(asctime)s %(levelname)s [%(module)s] %(message)s',  # noqa: E501 WPS323
+            'datefmt': '%Y-%m-%d %H:%M:%S',  # noqa: WPS323
+        },
     },
 
     # You can easily swap `key/value` (default) output and `json` ones.
@@ -33,7 +37,7 @@ LOGGING = {
     'handlers': {
         'console': {
             'class': 'logging.StreamHandler',
-            'formatter': 'console',
+            'formatter': 'simple',
         },
         'json_console': {
             'class': 'logging.StreamHandler',
@@ -54,6 +58,14 @@ LOGGING = {
             'handlers': ['console'],
             'level': 'ERROR',
             'propagate': False,
+        },
+        'axes': {
+            'handlers': ['console'],
+            'level': 'WARN',
+        },
+        '': {
+            'handlers': ['console'],
+            'level': 'INFO',
         },
     },
 }

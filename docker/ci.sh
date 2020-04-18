@@ -60,13 +60,13 @@ run_ci () {
   poetry check
 
   # Checking dependencies status:
-  pip check
+  # pip check
 
   # Checking docs:
   doc8 -q docs
 
   # Checking `yaml` files:
-  yamllint -d '{"extends": "default", "ignore": ".venv"}' -s .
+  yamllint -d '{"extends": "default", "ignore": ".venv\ncassettes"}' -s .
 
   # Checking `.env` files:
   dotenv-linter config/.env config/.env.template
