@@ -68,3 +68,63 @@ Primary Python libraries:
 [`server_tests/test_apps/test_main/test_event`](server_tests/test_apps/test_main/test_event) - event tests
 
 [`server_tests/test_apps/test_main/test_event/cassettes/test_get_events.yaml`](server_tests/test_apps/test_main/test_event/cassettes/test_get_events.yaml) - event cassettes, prevent real API calls in tests 
+
+## Web interface
+
+[`https://ticket.rfedorov.ru/api/event/`](https://ticket.rfedorov.ru/api/event/) 
+
+primary url with deployed version
+
+[`/admin/main/event/`](https://ticket.rfedorov.ru/admin/main/event/)
+ 
+list all Events in default django admin
+
+[`/api/event/G5vVZ4U9eCe11/`](https://ticket.rfedorov.ru/api/event/G5vVZ4U9eCe11/)
+
+View/Edit/Delete Event with id `G5vVZ4U9eCe11`
+
+[`/api/event/?limit=20&offset=20&cost_min__lte=50&name__contains=Seattle`](https://ticket.rfedorov.ru/api/event/?limit=20&offset=20&cost_min__lte=50&name__contains=Seattle)
+
+simple filter with sql equivalent `cost_min <= 50 and name like %Seattle%`
+
+[`/api/event/?limit=20&offset=20&cost_min__lte=50&promoter_name__contains=REGULAR&name__regex=York&start_date__hour=23`](https://ticket.rfedorov.ru/api/event/?limit=20&offset=20&cost_min__lte=50&promoter_name__contains=REGULAR&name__regex=York&start_date__hour=23)
+
+filter Events according next logic:
+- `cost_min` <= `50`
+- `promoter_name` contains text `REGULAR`
+- `name` regex match `York`
+- `start_date` get hour `23`
+
+## Filters
+[django documentation](https://docs.djangoproject.com/en/3.0/ref/models/querysets/#field-lookups)
+
+Supported filters:
+- exact
+- iexact
+- contains
+- icontains
+- in
+- gt
+- gte
+- lt
+- lte
+- startswith
+- istartswith
+- endswith
+- iendswith
+- range
+- date
+- year
+- iso_year
+- month
+- day
+- week
+- week_day
+- quarter
+- time
+- hour
+- minute
+- second
+- isnull
+- regex
+- iregex
