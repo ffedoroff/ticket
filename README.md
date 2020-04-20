@@ -1,32 +1,70 @@
-# ticket
+## Overview
 
-ticket
+This is sample django project built by Roman Fedorov (rfedorov@linkentools.com). 
+It has been requested by HR.
 
-This project was generated with [`wemake-django-template`](https://github.com/wemake-services/wemake-django-template). Current template version is: [d63f214fa623c00884749c3adda3d85f35a14ec6](https://github.com/wemake-services/wemake-django-template/tree/d63f214fa623c00884749c3adda3d85f35a14ec6). See what is [updated](https://github.com/wemake-services/wemake-django-template/compare/d63f214fa623c00884749c3adda3d85f35a14ec6...master) since then.
+## Original Requirements
 
+Hey Roman,
 
-[![wemake.services](https://img.shields.io/badge/%20-wemake.services-green.svg?label=%20&logo=data%3Aimage%2Fpng%3Bbase64%2CiVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAABGdBTUEAALGPC%2FxhBQAAAAFzUkdCAK7OHOkAAAAbUExURQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP%2F%2F%2F5TvxDIAAAAIdFJOUwAjRA8xXANAL%2Bv0SAAAADNJREFUGNNjYCAIOJjRBdBFWMkVQeGzcHAwksJnAPPZGOGAASzPzAEHEGVsLExQwE7YswCb7AFZSF3bbAAAAABJRU5ErkJggg%3D%3D)](https://wemake.services) 
-[![wemake-python-styleguide](https://img.shields.io/badge/style-wemake-000000.svg)](https://github.com/wemake-services/wemake-python-styleguide)
+It's ***, HR at *** team. I'm sending our code challenge. 
+There is no max or min time for it, but the usual range is about 5-7 hours. 
+The deadline for the code challenge will be ***, but feel free to let me know if you need some more time.
 
+In terms of our task, we would like you to:
 
-## Prerequisites
+1. Create a new web application using Django
 
-You will need:
+2. Scrape the Ticketmaster Discovery API for events
+https://developer.ticketmaster.com/products-and-docs/apis/discovery-api/v2/
+Don’t scrape everything. 50 pages should be enough because of API keys are limited by 5k requests per day.
 
-- `python3.7` (see `pyproject.toml` for full version)
-- `postgresql` with version `9.6`
-- `docker` with [version at least](https://docs.docker.com/compose/compose-file/#compose-and-docker-compatibility-matrix) `18.02`
+3. Store and/or structure the events that you scrape into your Django application. Event should have at least: event name, promoter name if it exists, description, multiple prices, url, start date, finish date)
 
+4. Inside your Django app, create a searchable api endpoint (returns json) allow the api request to search for event name, event start date, promoter name, ticket cost (min and max for a standard price).
 
-## Development
+5. Inside your application, create 1 API endpoint that accepts json that allows a user to update the locally stored event record, create some arbitrary validations.
 
-When developing locally, we use:
+6. Send us the code and the URL to your hosted application.
 
-- [`editorconfig`](http://editorconfig.org/) plugin (**required**)
-- [`poetry`](https://github.com/python-poetry/poetry) (**required**)
-- `pycharm 2017+` or `vscode`
+7. Write Tests you find necessary
 
+Ticketmaster API key: ***
+Please let us know in case you experience any issues with this.
+Looking forward to hearing from you!
 
-## Documentation
+## Blocks
 
-Full documentation is available here: [`docs/`](docs).
+This project based on wms [`django template`](README_wms.md):
+
+- Always up-to-date with the help of [`@dependabot`](https://dependabot.com/)
+- Supports latest `python3.7+`
+- [`poetry`](https://github.com/python-poetry/poetry) for managing dependencies
+- [`mypy`](https://mypy.readthedocs.io) and [`django-stubs`](https://github.com/typeddjango/django-stubs) for static typing
+- [`pytest`](https://pytest.org/) and [`hypothesis`](https://github.com/HypothesisWorks/hypothesis) for unit tests
+- [`flake8`](http://flake8.pycqa.org/en/latest/) and [`wemake-python-styleguide`](https://wemake-python-styleguide.readthedocs.io/en/latest/) for linting
+- [`docker`](https://www.docker.com/) for development, testing, and production
+- [`Gitlab CI`](https://about.gitlab.com/gitlab-ci/) with full `build`, `test`, and `deploy` pipeline configured by default
+
+Primary Python libraries:
+
+- `django` 2.2.12 (main framework)
+- `djangorestframework` (json REST API)
+- `djangorestframework-filters` (powerful filters)
+- `pytest-vcr` (save API output in cassettes for tests)
+- `tqdm` (display download progress)
+- `jsonschema` (validate input json)
+
+## Project Structure
+
+[`server/apps/main`](server/apps/main) - django root
+
+[`server/apps/main/event`](server/apps/main/event) - primary event logic
+
+[`server/apps/main/management/commands/get_events.py`](server/apps/main/management/commands/get_events.py) - download event logic
+
+[`server_tests`](server_tests) - all tests here
+
+[`server_tests/test_apps/test_main/test_event`](server_tests/test_apps/test_main/test_event) - event tests
+
+[`server_tests/test_apps/test_main/test_event/cassettes/test_get_events.yaml`](server_tests/test_apps/test_main/test_event/cassettes/test_get_events.yaml) - event cassettes, prevent real API calls in tests 
