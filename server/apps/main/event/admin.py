@@ -19,4 +19,4 @@ class PlanAdmin(admin.ModelAdmin):
         'created',
         'modified',
     )
-    list_filter = ('start_date', 'cost_min', 'cost_max', 'created', 'modified')
+    list_filter = ('start_date', 'created', 'modified')

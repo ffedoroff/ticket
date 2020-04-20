@@ -4,7 +4,6 @@ version: "3.6"
 services:
   db:
     image: "postgres:9.6.9-alpine"
-    user: "${UID}:${GID}"
     restart: unless-stopped
     volumes:
       - ./pgdata:/var/lib/postgresql/data
@@ -16,7 +15,11 @@ services:
     <<: &web
       # Image for production:
       image: "registry.gitlab.com/ffedoroff/ticket:latest"
-      user: "${UID}:${GID}"
+      build:
+        target: production_build
+        args:
+          DJANGO_ENV: production
+        context: ./
       restart: unless-stopped
       ports:
         - "25004:5004"
@@ -26,11 +29,24 @@ services:
         - db
       environment:
         DJANGO_DATABASE_HOST: db
+        DJANGO_ENV: production
+    volumes:
+      - django-locale:locale:rw
+      - django-media:/var/www/django/media:rw
+      - django-static:/var/www/django/static:rw
     command: sh ./docker/django/uwsgi.sh
 
 networks:
   # Network for your internals, use it by default:
   webnet:
 
-# docker-compose -f docker-compose.prod.yml up -d
-# docker-compose -f docker-compose.prod.yml run --rm web python manage.py migrate
+volumes:
+  pgdata:
+  django-static:
+  django-media:
+  django-locale:
+
+# docker-compose up -d
+# docker-compose run --rm db psql -h db -U postgres
+# docker-compose run --rm web python manage.py migrate
+# docker-compose run --rm web python manage.py createsuperuser
