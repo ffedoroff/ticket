@@ -83,11 +83,11 @@ list all Events in default django admin
 
 View/Edit/Delete Event with id `G5vVZ4U9eCe11`
 
-[`/api/event/?limit=20&offset=20&cost_min__lte=50&name__contains=Seattle`](https://ticket.rfedorov.ru/api/event/?limit=20&offset=20&cost_min__lte=50&name__contains=Seattle)
+[`/api/event/?limit=20&offset=0&cost_min__lte=50&name__contains=Seattle`](https://ticket.rfedorov.ru/api/event/?limit=20&offset=0&cost_min__lte=50&name__contains=Seattle)
 
 simple filter with sql equivalent `cost_min <= 50 and name like %Seattle%`
 
-[`/api/event/?limit=20&offset=20&cost_min__lte=50&promoter_name__contains=REGULAR&name__regex=York&start_date__hour=23`](https://ticket.rfedorov.ru/api/event/?limit=20&offset=20&cost_min__lte=50&promoter_name__contains=REGULAR&name__regex=York&start_date__hour=23)
+[`/api/event/?limit=20&offset=0&cost_min__lte=50&promoter_name__contains=REGULAR&name__regex=York&start_date__hour=23`](https://ticket.rfedorov.ru/api/event/?limit=20&offset=0&cost_min__lte=50&promoter_name__contains=REGULAR&name__regex=York&start_date__hour=23)
 
 filter Events according next logic:
 - `cost_min` <= `50`
